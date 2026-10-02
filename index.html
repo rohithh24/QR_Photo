@@ -1,58 +1,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>My Photo</title>
+<title>QR Photo</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(135deg, #111827, #312e81);
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
+body {
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e3a8a, #312e81);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
 
-        .card {
-            width: 100%;
-            max-width: 500px;
-            background: white;
-            padding: 15px;
-            border-radius: 22px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-            text-align: center;
-        }
+.container {
+    width: 100%;
+    max-width: 520px;
+    background: rgba(255,255,255,0.97);
+    border-radius: 28px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.35);
+}
 
-        h2 {
-            margin: 10px 0 15px;
-        }
+.logo {
+    width: 70px;
+    height: 70px;
+    margin: auto;
+    border-radius: 20px;
+    background: linear-gradient(135deg,#2563eb,#7c3aed);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 35px;
+    color: white;
+    box-shadow: 0 10px 25px rgba(37,99,235,0.35);
+}
 
-        img {
-            width: 100%;
-            display: block;
-            border-radius: 15px;
-        }
-    </style>
+h1 {
+    margin-top: 15px;
+    color: #111827;
+    font-size: 32px;
+}
+
+.subtitle {
+    color: #6b7280;
+    margin-top: 8px;
+    margin-bottom: 25px;
+}
+
+.upload-box {
+    border: 2px dashed #6366f1;
+    border-radius: 20px;
+    padding: 30px 15px;
+    background: #f5f7ff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.upload-box:hover {
+    background: #eef2ff;
+    transform: translateY(-2px);
+}
+
+.upload-icon {
+    font-size: 45px;
+    margin-bottom: 10px;
+}
+
+.upload-box h3 {
+    color: #1f2937;
+    margin-bottom: 6px;
+}
+
+.upload-box p {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+#photoInput {
+    display: none;
+}
+
+.preview {
+    margin-top: 20px;
+    display: none;
+}
+
+.preview img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.file-name {
+    margin-top: 10px;
+    color: #4b5563;
+    font-size: 14px;
+}
+
+button {
+    border: none;
+    border-radius: 14px;
+    padding: 14px 22px;
+    margin-top: 18px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+.generate-btn {
+    width: 100%;
+    background: linear-gradient(135deg,#2563eb,#7c3aed);
+    color: white;
+}
+
+.generate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(79,70,229,0.3);
+}
+
+.generate-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.qr-section {
+    display: none;
+    margin-top: 25px;
+    padding: 20px;
+    background: #f9fafb;
+    border-radius: 20px;
+}
+
+.qr-section h2 {
+    color: #111827;
+    margin-bottom: 15px;
+}
+
+#qrcode {
+    display: flex;
+    justify-content: center;
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+.scan-text {
+    color: #6b7280;
+    font-size: 14px;
+    margin-top: 12px;
+}
+
+.reset-btn {
+    background: #111827;
+    color: white;
+}
+
+.footer {
+    margin-top: 22px;
+    color: #9ca3af;
+    font-size: 12px;
+}
+</style>
+
+<!-- QR Code Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
 </head>
 
 <body>
 
-    <div class="card">
+<div class="container">
 
-        <h2>📸 My Photo</h2>
+    <div class="logo">📸</div>
 
-        <img src="photo.jpg" alt="My Photo">
+    <h1>QR Photo</h1>
+
+    <p class="subtitle">
+        Upload a photo and create a QR code
+    </p>
+
+    <label class="upload-box" for="photoInput">
+
+        <div class="upload-icon">📤</div>
+
+        <h3>Upload Your Photo</h3>
+
+        <p>Click here to choose an image</p>
+
+    </label>
+
+    <input
+        type="file"
+        id="photoInput"
+        accept="image/*"
+    >
+
+    <div class="preview" id="preview">
+
+        <img id="previewImage" alt="Selected Photo">
+
+        <div class="file-name" id="fileName"></div>
 
     </div>
+
+    <button
+        class="generate-btn"
+        id="generateBtn"
+        disabled
+    >
+        🔳 Generate QR Code
+    </button>
+
+    <div class="qr-section" id="qrSection">
+
+        <h2>📱 Scan QR Code</h2>
+
+        <div id="qrcode"></div>
+
+        <p class="scan-text">
+            Scan this QR code with your phone
+        </p>
+
+        <button class="reset-btn" onclick="resetApp()">
+            🔄 Upload Another Photo
+        </button>
+
+    </div>
+
+    <div class="footer">
+        QR Photo • Simple Photo Sharing
+    </div>
+
+</div>
+
+<script>
+
+const photoInput = document.getElementById("photoInput");
+const preview = document.getElementById("preview");
+const previewImage = document.getElementById("previewImage");
+const fileName = document.getElementById("fileName");
+const generateBtn = document.getElementById("generateBtn");
+const qrSection = document.getElementById("qrSection");
+
+let imageData = "";
+
+photoInput.addEventListener("change", function () {
+
+    const file = this.files[0];
+
+    if (!file) return;
+
+    fileName.textContent = file.name;
+
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+
+        imageData = e.target.result;
+
+        previewImage.src = imageData;
+
+        preview.style.display = "block";
+
+        generateBtn.disabled = false;
+    };
+
+    reader.readAsDataURL(file);
+});
+
+
+generateBtn.addEventListener("click", function () {
+
+    if (!imageData) return;
+
+    const qr = document.getElementById("qrcode");
+
+    qr.innerHTML = "";
+
+    new QRCode(qr, {
+        text: imageData,
+        width: 220,
+        height: 220,
+        correctLevel: QRCode.CorrectLevel.L
+    });
+
+    qrSection.style.display = "block";
+
+    qrSection.scrollIntoView({
+        behavior: "smooth"
+    });
+
+});
+
+
+function resetApp() {
+
+    photoInput.value = "";
+
+    imageData = "";
+
+    preview.style.display = "none";
+
+    qrSection.style.display = "none";
+
+    generateBtn.disabled = true;
+
+    document.getElementById("qrcode").innerHTML = "";
+}
+
+</script>
 
 </body>
 </html>
